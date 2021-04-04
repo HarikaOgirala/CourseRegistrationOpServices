@@ -1,4 +1,4 @@
-package com.registration.springboot;
+package com.ccsu.course.registration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

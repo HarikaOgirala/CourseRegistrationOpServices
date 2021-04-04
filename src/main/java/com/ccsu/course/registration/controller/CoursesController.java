@@ -1,4 +1,4 @@
-package com.registration.springboot.controller;
+package com.ccsu.course.registration.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.ccsu.course.registration.exception.ResourceNotFoundException;
+import com.ccsu.course.registration.model.Courses;
+import com.ccsu.course.registration.repository.CoursesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.registration.springboot.exception.ResourceNotFoundException;
-import com.registration.springboot.model.Courses;
-import com.registration.springboot.repository.CoursesRepository;;
 
 
 @CrossOrigin(origins = "http://localhost:4200")

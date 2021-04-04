@@ -1,4 +1,4 @@
-package com.registration.springboot.model;
+package com.ccsu.course.registration.model;
 
 import javax.persistence.*;
 

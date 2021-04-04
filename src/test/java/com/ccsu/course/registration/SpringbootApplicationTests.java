@@ -1,4 +1,4 @@
-package com.registration.springboot;
+package com.ccsu.course.registration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

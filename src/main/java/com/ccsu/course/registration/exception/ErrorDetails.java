@@ -1,4 +1,4 @@
-package com.registration.springboot.exception;
+package com.ccsu.course.registration.exception;
 
 import java.util.Date;
 
