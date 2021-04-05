@@ -3,7 +3,7 @@ package com.ccsu.course.registration.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "courses")
+@Table(name = "student_courses")
 public class Courses {
 
     private long id;
@@ -45,11 +45,11 @@ public class Courses {
         this.id = id;
     }
 
-    @Column(name = "courseNumber", nullable = false)
+    @Column(name = "coursenumber", nullable = false)
     public String getCourseNumber() { return courseNumber; }
     public void setCourseNumber(String courseNumber) { this.courseNumber = courseNumber; }
 
-    @Column(name = "courseName", nullable = false)
+    @Column(name = "coursename", nullable = false)
     public String getCourseName() {
         return courseName;
     }
@@ -69,11 +69,11 @@ public class Courses {
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
-    @Column(name = "preRequisites", nullable = false)
+    @Column(name = "prerequisites", nullable = false)
     public String getPreRequisites() { return preRequisites; }
     public void setPreRequisites(String preRequisites) { this.preRequisites = preRequisites; }
 
-    @Column(name = "partOfDay", nullable = false)
+    @Column(name = "partofday", nullable = false)
     public String getPartOfDay() { return partOfDay; }
     public void setPartOfDay(String partOfDay) { this.partOfDay = partOfDay; }
 
