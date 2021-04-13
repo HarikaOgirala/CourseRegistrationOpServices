@@ -5,22 +5,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.model.Courses;
+import com.ccsu.course.registration.model.CoursesDetails;
 import com.ccsu.course.registration.repository.CoursesRepository;
+import com.ccsu.course.registration.service.RestTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -29,11 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CoursesController {
     @Autowired
     private CoursesRepository coursesRepository;
+    @Autowired
+    private RestTemplateService restTemplateService;
 
     @GetMapping("/courses")
-    public List<Courses> getAllCourses() {
-
-        return coursesRepository.findAll();
+    public List<Courses> getAllCourses(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
     }
 
     @GetMapping("/courses/{id}")
@@ -80,5 +78,13 @@ public class CoursesController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @GetMapping("/courses/register")
+    public Map<String, Boolean> registerCourse(@RequestParam(value = "id") String id) {
+        CoursesDetails courses =  restTemplateService.getCourseDetails(id);
+        Map<String, Boolean> responseMap = new HashMap<>();
+        responseMap.put("registered",true);
+        return responseMap;
     }
 }

@@ -1,26 +1,27 @@
 package com.ccsu.course.registration.controller;
-
 import com.ccsu.course.registration.service.LoginService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import javax.websocket.server.PathParam;
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v2")
 public class LoginController {
+
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private LoginService loginService;
 
     @GetMapping("/login")
-    public Boolean authenticateUser(Map<String, Object> model, @PathParam("uname") String uname, @PathParam("password") String password) throws IOException {
-        System.out.println("username : " + uname + " password : " + password);
-        Boolean response = loginService.authenticateUser(uname, password);
-        model.put("authenticate", response);
-        return response;
+    public Boolean authenticateUser(Authentication authentication) throws IOException {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        logger.info("login successful for user :{}",userDetails.getUsername());
+        return true;
     }
 }

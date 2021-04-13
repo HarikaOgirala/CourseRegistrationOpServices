@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  course_op:
+    image: mysql:5.7
+    container_name: course_op
+    ports:
+    - 3306:3306
+    volumes:
+      - db_course_op:/var/lib/mysql/courseop/data
+    environment:
+    - MYSQL_DATABASE:advisory_bot
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=user
+    - MYSQL_ROOT_PASSWORD=root-user
+
+volumes:
+  db_course_op:
+
+

@@ -1,9 +1,12 @@
 package com.ccsu.course.registration.model;
 
+import com.ccsu.course.registration.constants.CourseStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "student_courses")
+@Table(name = "courses")
 public class Courses {
 
     private long id;
@@ -16,7 +19,7 @@ public class Courses {
     private String time;
     private String day;
     private String faculty;
-
+    private CourseStatus status;
 
     public Courses(){
 
@@ -37,6 +40,7 @@ public class Courses {
 
  
     @Id
+    @Column(name = "course_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
@@ -93,6 +97,14 @@ public class Courses {
     public String getFaculty() { return faculty; }
     public void setFaculty(String faculty) { this.faculty = faculty; }
 
+
+    @Transient
+    public CourseStatus getStatus() {
+        return status;
+    }
+    public void setStatus(CourseStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
