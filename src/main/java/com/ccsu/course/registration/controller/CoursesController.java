@@ -3,10 +3,12 @@ package com.ccsu.course.registration.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.model.Courses;
 import com.ccsu.course.registration.model.CoursesDetails;
@@ -81,10 +83,23 @@ public class CoursesController {
     }
 
     @GetMapping("/courses/register")
-    public Map<String, Boolean> registerCourse(@RequestParam(value = "id") String id) {
-        CoursesDetails courses =  restTemplateService.getCourseDetails(id);
+    public Map<String, Boolean> registerCourse(Authentication authentication, @RequestParam(value = "id") String id) {
+        validateCourse(authentication, id);
         Map<String, Boolean> responseMap = new HashMap<>();
         responseMap.put("registered",true);
         return responseMap;
+    }
+
+    private void validateCourse(Authentication authentication, String id) {
+        boolean isValid = false;
+        CoursesDetails courses =  restTemplateService.getCourseDetails(id);
+        List<String> preRequisites = courses.getPrerequisite().stream().map(p -> p.trim()).collect(Collectors.toList());
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<Courses> userCourses = coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
+        List<Courses> registeredCourses = userCourses.stream().filter(course -> CourseStatus.COMPLETED.name().equals(course.getStatus())).collect(Collectors.toList());
+        isValid = registeredCourses.stream().anyMatch(registeredCourse -> preRequisites.contains(registeredCourse.getCourseNumber().trim()));
+        if(!isValid) {
+            throw new RuntimeException("PreRequisites "+ String.join(",",preRequisites)+ " are not completed");
+        }
     }
 }
