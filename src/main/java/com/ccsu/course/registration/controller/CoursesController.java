@@ -10,14 +10,21 @@ import javax.websocket.server.PathParam;
 
 import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
+import com.ccsu.course.registration.model.CourseResponse;
 import com.ccsu.course.registration.model.Courses;
 import com.ccsu.course.registration.model.CoursesDetails;
+import com.ccsu.course.registration.model.StudentCourses;
 import com.ccsu.course.registration.repository.CoursesRepository;
+import com.ccsu.course.registration.repository.StudentCoursesRepository;
+import com.ccsu.course.registration.service.CourseRegistrationService;
 import com.ccsu.course.registration.service.RestTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,15 +32,25 @@ import org.springframework.web.bind.annotation.*;
 @RestController 
 @RequestMapping("/api/v1")
 public class CoursesController {
+
     @Autowired
     private CoursesRepository coursesRepository;
     @Autowired
+    private CourseRegistrationService courseRegistrationService;
+    @Autowired
     private RestTemplateService restTemplateService;
 
-    @GetMapping("/courses")
-    public List<Courses> getAllCourses(Authentication authentication) {
+    private static final String STATUS_ALL = "ALL";
+
+    @GetMapping("/courses/status/{status}")
+    public List<CourseResponse> getAllCourses(Authentication authentication,@PathVariable(value = "status") String status) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
+        if(STATUS_ALL.equalsIgnoreCase(status) || ObjectUtils.isEmpty(status)) {
+            return coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
+        }
+        else{
+            return coursesRepository.getAllCoursesByUserNameAndStatus(userDetails.getUsername(), CourseStatus.valueOf(status));
+        }
     }
 
     @GetMapping("/courses/{id}")
@@ -75,7 +92,6 @@ public class CoursesController {
          throws ResourceNotFoundException {
         Courses courses = coursesRepository.findById(coursesId)
        .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
-
         coursesRepository.delete(courses);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
@@ -83,23 +99,17 @@ public class CoursesController {
     }
 
     @GetMapping("/courses/register")
-    public Map<String, Boolean> registerCourse(Authentication authentication, @RequestParam(value = "id") String id) {
-        validateCourse(authentication, id);
+    public Map<String, Boolean> registerCourse(Authentication authentication, @RequestParam(value = "id") String id) throws ResourceNotFoundException {
+        courseRegistrationService.validateAndRegisterCourse(authentication, id);
         Map<String, Boolean> responseMap = new HashMap<>();
         responseMap.put("registered",true);
         return responseMap;
     }
 
-    private void validateCourse(Authentication authentication, String id) {
-        boolean isValid = false;
-        CoursesDetails courses =  restTemplateService.getCourseDetails(id);
-        List<String> preRequisites = courses.getPrerequisite().stream().map(p -> p.trim()).collect(Collectors.toList());
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<Courses> userCourses = coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
-        List<Courses> registeredCourses = userCourses.stream().filter(course -> CourseStatus.COMPLETED.name().equals(course.getStatus())).collect(Collectors.toList());
-        isValid = registeredCourses.stream().anyMatch(registeredCourse -> preRequisites.contains(registeredCourse.getCourseNumber().trim()));
-        if(!isValid) {
-            throw new RuntimeException("PreRequisites "+ String.join(",",preRequisites)+ " are not completed");
-        }
+    @GetMapping("/courses/all")
+    public ResponseEntity<List<String>> getCoursesList() {
+        List<CoursesDetails> coursesDetails = restTemplateService.getAllCourseDetails();
+        List<String> courseNumbers = coursesDetails.stream().map(course -> course.getCourseNumber()).collect(Collectors.toList());
+        return ResponseEntity.ok(courseNumbers);
     }
 }

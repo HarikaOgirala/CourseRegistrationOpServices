@@ -19,7 +19,6 @@ public class Courses {
     private String time;
     private String day;
     private String faculty;
-    private CourseStatus status;
 
     public Courses(){
 
@@ -41,7 +40,7 @@ public class Courses {
  
     @Id
     @Column(name = "course_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -49,11 +48,11 @@ public class Courses {
         this.id = id;
     }
 
-    @Column(name = "coursenumber", nullable = false)
+    @Column(name = "coursenumber")
     public String getCourseNumber() { return courseNumber; }
     public void setCourseNumber(String courseNumber) { this.courseNumber = courseNumber; }
 
-    @Column(name = "coursename", nullable = false)
+    @Column(name = "coursename")
     public String getCourseName() {
         return courseName;
     }
@@ -61,7 +60,7 @@ public class Courses {
         this.courseName = courseName;
     }
 
-    @Column(name = "semester", nullable = false)
+    @Column(name = "semester")
     public String getSemester() {
         return semester;
     }
@@ -69,19 +68,19 @@ public class Courses {
         this.semester = semester;
     }
 
-    @Column(name = "type", nullable = false)
+    @Column(name = "type")
     public String getType() { return type; }
     public void setType(String type) { this.type = type; }
 
-    @Column(name = "prerequisites", nullable = false)
+    @Column(name = "prerequisites")
     public String getPreRequisites() { return preRequisites; }
     public void setPreRequisites(String preRequisites) { this.preRequisites = preRequisites; }
 
-    @Column(name = "partofday", nullable = false)
+    @Column(name = "partofday", nullable = true)
     public String getPartOfDay() { return partOfDay; }
     public void setPartOfDay(String partOfDay) { this.partOfDay = partOfDay; }
 
-    @Column(name = "time", nullable = false)
+    @Column(name = "time")
     public String getTime() {
         return time;
     }
@@ -89,22 +88,13 @@ public class Courses {
         this.time = time;
     }
 
-    @Column(name = "day", nullable = false)
+    @Column(name = "day")
     public String getDay() { return day; }
     public void setDay(String day) { this.day = day; }
 
-    @Column(name = "faculty", nullable = false)
+    @Column(name = "faculty")
     public String getFaculty() { return faculty; }
     public void setFaculty(String faculty) { this.faculty = faculty; }
-
-
-    @Transient
-    public CourseStatus getStatus() {
-        return status;
-    }
-    public void setStatus(CourseStatus status) {
-        this.status = status;
-    }
 
     @Override
     public String toString() {

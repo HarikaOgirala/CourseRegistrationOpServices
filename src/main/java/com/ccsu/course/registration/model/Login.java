@@ -6,16 +6,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 public class Login {
-    private int ccsuId;
+    private Long ccsuId;
     private String userName;
     private String password;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getCcsuId() {
-        return ccsuId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long getCcsuId() {
+        return this.ccsuId;
     }
-    public void setCcsuId(long id) {
+    public void setCcsuId(Long ccsuId) {
         this.ccsuId = ccsuId;
     }
 
