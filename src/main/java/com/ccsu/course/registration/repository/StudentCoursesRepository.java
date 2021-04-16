@@ -9,8 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentCoursesRepository extends JpaRepository<StudentCourses, Long>{
+
+    Optional<StudentCourses> findByCourseIdAndCcsuId(Long courseId, Long ccsuId);
 
 }

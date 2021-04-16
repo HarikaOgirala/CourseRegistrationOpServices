@@ -43,7 +43,7 @@ public class CourseRegistrationService {
         List<String> completedCourses = userCourses.stream().filter(course -> CourseStatus.COMPLETED.equals(course.getStatus())).map(course ->course.getCourseNumber().trim()).collect(Collectors.toList());
         List<String> registeredCourses = userCourses.stream().filter(course -> CourseStatus.REGISTERED.equals(course.getStatus())).map(course ->course.getCourseNumber().trim()).collect(Collectors.toList());
         isValid = preRequisites.stream().filter(preRequisite -> !completedCourses.contains(preRequisite)).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(isValid) || CollectionUtils.isEmpty(completedCourses)) {
+        if(!CollectionUtils.isEmpty(isValid)) {
             throw new RuntimeException("PreRequisites "+ String.join(",",isValid.stream().collect(Collectors.joining(","))+ " are not completed"));
         }
         else if(ObjectUtils.isEmpty(courses.getCourseNumber())){

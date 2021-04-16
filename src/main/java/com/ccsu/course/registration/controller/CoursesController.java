@@ -3,6 +3,7 @@ package com.ccsu.course.registration.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -10,11 +11,9 @@ import javax.websocket.server.PathParam;
 
 import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
-import com.ccsu.course.registration.model.CourseResponse;
-import com.ccsu.course.registration.model.Courses;
-import com.ccsu.course.registration.model.CoursesDetails;
-import com.ccsu.course.registration.model.StudentCourses;
+import com.ccsu.course.registration.model.*;
 import com.ccsu.course.registration.repository.CoursesRepository;
+import com.ccsu.course.registration.repository.LoginRepository;
 import com.ccsu.course.registration.repository.StudentCoursesRepository;
 import com.ccsu.course.registration.service.CourseRegistrationService;
 import com.ccsu.course.registration.service.RestTemplateService;
@@ -36,9 +35,13 @@ public class CoursesController {
     @Autowired
     private CoursesRepository coursesRepository;
     @Autowired
+    private StudentCoursesRepository studentCoursesRepository;
+    @Autowired
     private CourseRegistrationService courseRegistrationService;
     @Autowired
     private RestTemplateService restTemplateService;
+    @Autowired
+    private LoginRepository loginRepository;
 
     private static final String STATUS_ALL = "ALL";
 
@@ -88,11 +91,14 @@ public class CoursesController {
     }
 
     @DeleteMapping("/courses/{id}")
-    public Map<String, Boolean> deleteCourses(@PathVariable(value = "id") Long coursesId)
+    public Map<String, Boolean> deleteCourses(Authentication authentication, @PathVariable(value = "id") Long coursesId)
          throws ResourceNotFoundException {
-        Courses courses = coursesRepository.findById(coursesId)
-       .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
-        coursesRepository.delete(courses);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Login user = loginRepository.findByUserName(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Username not found :: " + userDetails.getUsername()));
+        StudentCourses studentCourses = studentCoursesRepository.findByCourseIdAndCcsuId(coursesId, user.getCcsuId())
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found for user:: " + userDetails.getUsername()));
+        studentCoursesRepository.delete(studentCourses);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
