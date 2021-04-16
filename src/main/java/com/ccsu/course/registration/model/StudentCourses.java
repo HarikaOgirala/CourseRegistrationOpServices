@@ -31,7 +31,6 @@ public class StudentCourses {
     }
 
     @Column(name = "ccsu_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public long getCcsuId() {
         return ccsuId;
     }
