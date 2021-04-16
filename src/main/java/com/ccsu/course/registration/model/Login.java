@@ -8,6 +8,8 @@ import javax.persistence.*;
 public class Login {
     private Long ccsuId;
     private String userName;
+    private String firstName;
+    private String lastName;
     private String password;
 
     @Id
@@ -22,6 +24,22 @@ public class Login {
     @Column(name = "username", nullable = false)
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
+
+    @Column(name = "firstname", nullable = false)
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "lastname", nullable = false)
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     @Column(name = "password", nullable = false)
     public String getPassword() {

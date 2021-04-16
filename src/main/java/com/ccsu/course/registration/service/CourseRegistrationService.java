@@ -62,7 +62,7 @@ public class CourseRegistrationService {
             if(login.isPresent()) {
                 StudentCourses studentCourses = buildStudentCourses(course.getId(), login.get().getCcsuId(), CourseStatus.REGISTERED);
                 studentCoursesRepository.save(studentCourses);
-               // mailService.sendEmail();
+                mailService.sendEmail(course, login.get());
             }
             else {
                throw new RuntimeException("User not found for id "+userDetails.getUsername());
