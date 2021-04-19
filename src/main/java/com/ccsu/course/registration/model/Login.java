@@ -11,6 +11,8 @@ public class Login {
     private String firstName;
     private String lastName;
     private String password;
+    private String email;
+    private String resetPasswordToken;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,4 +51,17 @@ public class Login {
         this.password = password;
     }
 
+    @Column(name = "email", nullable = false)
+    public String getEmail() { return email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "reset_password_token", nullable = false)
+    public String getResetPasswordToken() { return resetPasswordToken; }
+    public void setResetPasswordToken(String resetPasswordToken) { this.resetPasswordToken = resetPasswordToken; }
 }
+
+
+
+
