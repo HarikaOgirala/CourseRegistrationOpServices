@@ -3,11 +3,9 @@ package com.ccsu.course.registration.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
@@ -17,18 +15,18 @@ import com.ccsu.course.registration.repository.LoginRepository;
 import com.ccsu.course.registration.repository.StudentCoursesRepository;
 import com.ccsu.course.registration.service.CourseRegistrationService;
 import com.ccsu.course.registration.service.RestTemplateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
-@RestController 
+@RestController
 @RequestMapping("/api/v1")
 public class CoursesController {
 
@@ -45,25 +43,26 @@ public class CoursesController {
 
     private static final String STATUS_ALL = "ALL";
 
+    private static final Logger logger = LoggerFactory.getLogger(CoursesController.class);
+
     @GetMapping("/courses/status/{status}")
-    public List<CourseResponse> getAllCourses(Authentication authentication,@PathVariable(value = "status") String status) {
+    public List<CourseResponse> getAllCourses(Authentication authentication, @PathVariable(value = "status") String status) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        if(STATUS_ALL.equalsIgnoreCase(status) || ObjectUtils.isEmpty(status)) {
+        if (STATUS_ALL.equalsIgnoreCase(status) || ObjectUtils.isEmpty(status)) {
             return coursesRepository.getAllCoursesByUserName(userDetails.getUsername());
-        }
-        else{
+        } else {
             return coursesRepository.getAllCoursesByUserNameAndStatus(userDetails.getUsername(), CourseStatus.valueOf(status));
         }
     }
 
     @GetMapping("/courses/{id}")
     public ResponseEntity<Courses> getCoursesById(@PathVariable(value = "id") Long coursesId)
-        throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         Courses courses = coursesRepository.findById(coursesId)
-          .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
         return ResponseEntity.ok().body(courses);
     }
-    
+
     @PostMapping("/courses")
     public Courses createCourses(@Valid @RequestBody Courses courses) {
         return coursesRepository.save(courses);
@@ -71,9 +70,9 @@ public class CoursesController {
 
     @PutMapping("/courses/{id}")
     public ResponseEntity<Courses> updateCourses(@PathVariable(value = "id") Long coursesId,
-         @Valid @RequestBody Courses coursesDetails) throws ResourceNotFoundException {
+                                                 @Valid @RequestBody Courses coursesDetails) throws ResourceNotFoundException {
         Courses courses = coursesRepository.findById(coursesId)
-        .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
+                .orElseThrow(() -> new ResourceNotFoundException("Course not found for this id :: " + coursesId));
 
         courses.setCourseNumber(coursesDetails.getCourseNumber());
         courses.setCourseName(coursesDetails.getCourseName());
@@ -92,7 +91,7 @@ public class CoursesController {
 
     @DeleteMapping("/courses/{id}")
     public Map<String, Boolean> deleteCourses(Authentication authentication, @PathVariable(value = "id") Long coursesId)
-         throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Login user = loginRepository.findByUserName(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("Username not found :: " + userDetails.getUsername()));
@@ -108,7 +107,7 @@ public class CoursesController {
     public Map<String, Boolean> registerCourse(Authentication authentication, @RequestParam(value = "id") String id) throws ResourceNotFoundException {
         courseRegistrationService.validateAndRegisterCourse(authentication, id);
         Map<String, Boolean> responseMap = new HashMap<>();
-        responseMap.put("registered",true);
+        responseMap.put("registered", true);
         return responseMap;
     }
 
@@ -117,5 +116,12 @@ public class CoursesController {
         List<CoursesDetails> coursesDetails = restTemplateService.getAllCourseDetails();
         List<String> courseNumbers = coursesDetails.stream().map(course -> course.getCourseNumber()).collect(Collectors.toList());
         return ResponseEntity.ok(courseNumbers);
+    }
+
+    @GetMapping("/courses/sendmail")
+    public ResponseEntity<Boolean> sendEmail(Authentication authentication, @RequestParam(value = "id") String id) throws ResourceNotFoundException {
+        courseRegistrationService.sendEmail(authentication, id);
+        logger.info("Email Sent");
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 }

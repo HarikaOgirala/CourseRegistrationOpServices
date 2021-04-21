@@ -4,7 +4,6 @@ import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.model.*;
 import com.ccsu.course.registration.repository.CoursesRepository;
-import com.ccsu.course.registration.repository.LoginRepository;
 import com.ccsu.course.registration.repository.StudentCoursesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,6 +66,14 @@ public class CourseRegistrationService {
             }
 
         }
+    }
+
+    public void sendEmail(Authentication authentication, String id) throws ResourceNotFoundException {
+        CoursesDetails courses =  restTemplateService.getCourseDetails(id);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Optional<Login> login = loginService.getUserDetails(userDetails.getUsername());
+        Courses course = buildCourseEntity(courses);
+        mailService.sendEmail(course, login.get());
     }
 
     private StudentCourses buildStudentCourses(long courseId, long ccsuId, CourseStatus status) {
