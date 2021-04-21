@@ -103,7 +103,7 @@ public class ForgotPasswordController {
             return "message";
         } else {
             loginService.updatePassword(login, password);
-            logger.error("Successfully updated the password");
+            logger.info("Successfully updated the password");
         }
         return "message";
     }
