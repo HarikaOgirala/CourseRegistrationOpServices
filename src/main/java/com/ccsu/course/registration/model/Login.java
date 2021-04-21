@@ -57,7 +57,7 @@ public class Login {
         this.email = email;
     }
 
-    @Column(name = "reset_password_token", nullable = false)
+    @Column(name = "reset_password_token")
     public String getResetPasswordToken() { return resetPasswordToken; }
     public void setResetPasswordToken(String resetPasswordToken) { this.resetPasswordToken = resetPasswordToken; }
 }

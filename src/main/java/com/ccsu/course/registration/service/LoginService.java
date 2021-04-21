@@ -6,6 +6,7 @@ import com.ccsu.course.registration.model.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class LoginService {
     }
 
 
+    @Transactional
     public void updateResetPasswordToken(String token, String email) throws ResourceNotFoundException {
         Login login = loginRepository.findByEmail(email);
         if (login != null) {
@@ -38,10 +40,9 @@ public class LoginService {
     }
 
     public void updatePassword(Login login, String newPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(4);
         String encodedPassword = passwordEncoder.encode(newPassword);
         login.setPassword(encodedPassword);
-
         login.setResetPasswordToken(null);
         loginRepository.save(login);
     }

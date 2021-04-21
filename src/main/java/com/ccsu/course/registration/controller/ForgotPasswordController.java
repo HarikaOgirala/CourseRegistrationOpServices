@@ -1,14 +1,19 @@
 package com.ccsu.course.registration.controller;
+
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
+import com.ccsu.course.registration.model.ForgotPassword;
 import com.ccsu.course.registration.model.Login;
 import com.ccsu.course.registration.service.LoginService;
 import net.bytebuddy.utility.RandomString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -26,26 +31,28 @@ public class ForgotPasswordController {
     @Autowired
     private LoginService loginService;
 
+    @Value("${courseOp.registration.url}")
+    private String registrationUrl;
 
-   /* @PostMapping("/login/forgot_password")
-    public String processForgotPassword(HttpServletRequest request, Model model) {
-        String email = request.getParameter("email");
+    private static final Logger logger = LoggerFactory.getLogger(ForgotPasswordController.class);
+
+    @PostMapping("/login/forgot_password")
+    public String processForgotPassword(@RequestBody ForgotPassword forgotPassword) {
+        String email = forgotPassword.getEmail();
         String token = RandomString.make(30);
 
         try {
             loginService.updateResetPasswordToken(token, email);
-            String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password?token=" + token;
+            String resetPasswordLink = registrationUrl + "/resetpassword?token=" + token;
             sendEmail(email, resetPasswordLink);
-            model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
 
         } catch (ResourceNotFoundException ex) {
-            model.addAttribute("error", ex.getMessage());
+            logger.info("Error while sending email {}", ex.getMessage());
         } catch (UnsupportedEncodingException | MessagingException e) {
-            model.addAttribute("error", "Error while sending email");
+            logger.info("Error while sending email {}", e.getMessage());
         }
-
         return "forgot-password-form";
-    }*/
+    }
 
     public void sendEmail(String recipientEmail, String link)
             throws MessagingException, UnsupportedEncodingException {
@@ -86,20 +93,17 @@ public class ForgotPasswordController {
     }*/
 
     @PostMapping("/login/reset_password")
-    public String processResetPassword(HttpServletRequest request, Model model) {
-        String token = request.getParameter("token");
-        String password = request.getParameter("password");
+    public String processResetPassword(@RequestBody ForgotPassword forgotPassword) {
+        String token = forgotPassword.getToken();
+        String password = forgotPassword.getPassword();
 
         Login login = loginService.getByResetPasswordToken(token);
-        model.addAttribute("title", "Reset your password");
-
         if (login == null) {
-            model.addAttribute("message", "Invalid Token");
+            logger.error("Invalid Token");
             return "message";
         } else {
             loginService.updatePassword(login, password);
-
-            model.addAttribute("message", "You have successfully changed your password.");
+            logger.error("Successfully updated the password");
         }
         return "message";
     }
