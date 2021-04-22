@@ -1,8 +1,9 @@
 package com.ccsu.course.registration.controller;
 
+import com.ccsu.course.registration.entity.Login;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.model.ForgotPassword;
-import com.ccsu.course.registration.model.Login;
+
 import com.ccsu.course.registration.service.LoginService;
 import net.bytebuddy.utility.RandomString;
 import org.slf4j.Logger;
