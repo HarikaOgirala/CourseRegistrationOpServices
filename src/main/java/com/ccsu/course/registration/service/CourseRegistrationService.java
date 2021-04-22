@@ -54,7 +54,10 @@ public class CourseRegistrationService {
         }
         else {
             Courses course = buildCourseEntity(courses);
-            coursesRepository.save(course);
+            Optional<Courses> courseDetails = coursesRepository.findByCourseNumber(course.getCourseNumber());
+            if(!courseDetails.isPresent()){
+                coursesRepository.save(course);
+            }
             Optional<Login> login = loginService.getUserDetails(userDetails.getUsername());
             if(login.isPresent()) {
                 StudentCourses studentCourses = buildStudentCourses(course.getId(), login.get().getCcsuId(), CourseStatus.REGISTERED);
