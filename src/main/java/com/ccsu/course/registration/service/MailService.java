@@ -1,14 +1,12 @@
 package com.ccsu.course.registration.service;
 
-import com.ccsu.course.registration.model.Courses;
-import com.ccsu.course.registration.model.Login;
+import com.ccsu.course.registration.entity.Courses;
+import com.ccsu.course.registration.entity.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

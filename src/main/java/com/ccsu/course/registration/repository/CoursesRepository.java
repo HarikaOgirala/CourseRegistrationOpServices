@@ -2,9 +2,7 @@ package com.ccsu.course.registration.repository;
 
 import com.ccsu.course.registration.constants.CourseStatus;
 import com.ccsu.course.registration.model.CourseResponse;
-import com.ccsu.course.registration.model.Courses;
-import com.ccsu.course.registration.model.Login;
-import com.ccsu.course.registration.model.StudentCourses;
+import com.ccsu.course.registration.entity.Courses;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,6 +1,6 @@
 package com.ccsu.course.registration.repository;
 
-import com.ccsu.course.registration.model.Login;
+import com.ccsu.course.registration.entity.Login;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

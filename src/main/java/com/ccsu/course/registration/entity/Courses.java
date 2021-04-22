@@ -1,4 +1,4 @@
-package com.ccsu.course.registration.model;
+package com.ccsu.course.registration.entity;
 
 import com.ccsu.course.registration.constants.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;

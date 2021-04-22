@@ -1,11 +1,10 @@
 package com.ccsu.course.registration.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.ccsu.course.registration.model.Login;
+import com.ccsu.course.registration.entity.Login;
 import com.ccsu.course.registration.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.ccsu.course.registration.constants.CourseStatus;
+import com.ccsu.course.registration.entity.Courses;
+import com.ccsu.course.registration.entity.Login;
+import com.ccsu.course.registration.entity.StudentCourses;
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.model.*;
 import com.ccsu.course.registration.repository.CoursesRepository;

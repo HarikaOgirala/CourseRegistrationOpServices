@@ -2,11 +2,10 @@ package com.ccsu.course.registration.service;
 
 import com.ccsu.course.registration.exception.ResourceNotFoundException;
 import com.ccsu.course.registration.repository.LoginRepository;
-import com.ccsu.course.registration.model.Login;
+import com.ccsu.course.registration.entity.Login;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
