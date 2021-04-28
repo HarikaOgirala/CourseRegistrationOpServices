@@ -100,10 +100,7 @@ public class CoursesController {
                 .orElseThrow(() -> new ResourceNotFoundException("Username not found :: " + userDetails.getUsername()));
         StudentCourses studentCourses = studentCoursesRepository.findByCourseIdAndCcsuId(coursesId, user.getCcsuId())
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found for user:: " + userDetails.getUsername()));
-        Courses courses = coursesRepository.findById(coursesId)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found :: " + userDetails.getUsername()));
         studentCoursesRepository.delete(studentCourses);
-        coursesRepository.delete(courses);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;

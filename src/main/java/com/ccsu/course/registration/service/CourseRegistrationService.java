@@ -33,7 +33,6 @@ public class CourseRegistrationService {
     @Autowired
     private MailService mailService;
 
-    @Transactional
     public void validateAndRegisterCourse(Authentication authentication, String id) throws ResourceNotFoundException {
         List<String> isValid;
         CoursesDetails courses =  restTemplateService.getCourseDetails(id);
@@ -59,13 +58,16 @@ public class CourseRegistrationService {
             Courses course = buildCourseEntity(courses);
             Optional<Courses> courseDetails = coursesRepository.findByCourseNumber(course.getCourseNumber());
             if(!courseDetails.isPresent()){
-                coursesRepository.save(course);
+                course = coursesRepository.save(course);
+            }
+            else {
+                course = courseDetails.get();
             }
             Optional<Login> login = loginService.getUserDetails(userDetails.getUsername());
             if(login.isPresent()) {
                 StudentCourses studentCourses = buildStudentCourses(course.getId(), login.get().getCcsuId(), CourseStatus.REGISTERED);
                 studentCoursesRepository.save(studentCourses);
-                mailService.sendEmail(course, login.get());
+                //mailService.sendEmail(course, login.get());
             }
             else {
                throw new RuntimeException("User not found for id "+userDetails.getUsername());
