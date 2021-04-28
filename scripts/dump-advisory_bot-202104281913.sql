@@ -33,8 +33,10 @@ CREATE TABLE `courses` (
   `time` varchar(100) DEFAULT NULL,
   `day` varchar(100) DEFAULT NULL,
   `faculty` varchar(100) DEFAULT NULL,
+  `coursedesc` varchar(250) DEFAULT NULL,
+  `crn` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`course_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +45,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (1,'123','Artificial Intelligence','summer','graduate','yes','evening','5:00 pm','Thursday','Neli');
+INSERT INTO `courses` VALUES (69,'CS 151','Computer Science 1','Spring','Undergraduate','None',NULL,'Afternoon,10:50_12:05_pm','Monday,Wednesday','Irena_Pevac','Introduction to Computer Science','40387');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +62,7 @@ CREATE TABLE `student_courses` (
   `status` varchar(100) DEFAULT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +71,7 @@ CREATE TABLE `student_courses` (
 
 LOCK TABLES `student_courses` WRITE;
 /*!40000 ALTER TABLE `student_courses` DISABLE KEYS */;
-INSERT INTO `student_courses` VALUES (1,1,'REGISTERED',1);
+INSERT INTO `student_courses` VALUES (123456,69,'REGISTERED',75);
 /*!40000 ALTER TABLE `student_courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,8 +89,9 @@ CREATE TABLE `user` (
   `firstname` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
+  `reset_password_token` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ccsu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=654322 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +100,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'harika','$2a$04$lMTaJIaYv2mQEASzDCUoj.rcMLNIY6BGv9VM4ZoHfXiKmMHY.5IuS','harika','ogirala','n.ogirala@my.ccsu.edu');
+INSERT INTO `user` VALUES (123321,'sherin','$2a$04$vN/7MHKco3uyWSuvCBn4LecSSldoD1VDnHGq5ojLAdoyL5725AcOm','sherin','cheriyan','scheriyan@my.ccsu.edu',NULL),(123456,'harika','$2a$04$tuNO3Ku6ac/V7VRyiqp.fOSoKL5alp6SU7V56UUZuxhB2fBZ4qTkW','harika','ogirala','nagaharika.ogirala@gmail.com',NULL),(654321,'swetaa','$2a$04$ezXy9TPur.hEUdH8O7bpc.NkMrH7L43p90WJQK.Ppt18TjVU8AQMu','swetaa','ganesan','swetaaganesan@gmail.com',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,4 +117,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-12 21:32:49
+-- Dump completed on 2021-04-28 19:13:08

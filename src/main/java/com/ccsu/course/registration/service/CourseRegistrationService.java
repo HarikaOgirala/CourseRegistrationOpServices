@@ -97,12 +97,21 @@ public class CourseRegistrationService {
         course.setCourseNumber(courses.getCourseNumber());
         course.setCourseName(courses.getCourseName());
         course.setSemester(courses.getSemesters().stream().collect(Collectors.joining(",")));
-        course.setType(course.getType());
-        course.setPreRequisites(courses.getPrerequisite().stream().collect(Collectors.joining(",")));
+        course.setType(courses.getType());
+        if(!CollectionUtils.isEmpty(courses.getPrerequisite()) && courses.getPrerequisite().size() == 1){
+            if(courses.getPrerequisite().get(0).equals("null")) {
+                course.setPreRequisites("None");
+            }
+        }
+        else {
+            course.setPreRequisites(courses.getPrerequisite().stream().collect(Collectors.joining(",")));
+        }
         course.setPartOfDay(courses.getPartOfDay());
-        course.setTime(course.getTime());
+        course.setTime(courses.getTimings().stream().collect(Collectors.joining(",")));
         course.setDay(courses.getDays().stream().collect(Collectors.joining(",")));
         course.setFaculty(courses.getFaculty().getName());
+        course.setCourseDesc(courses.getCourseDesc());
+        course.setCrn(courses.getCourseCRN());
         return course;
     }
 }

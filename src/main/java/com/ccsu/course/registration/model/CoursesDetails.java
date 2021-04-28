@@ -19,6 +19,15 @@ public class CoursesDetails {
     private String courseCRN;
     @JsonProperty("taughtBy")
     private Faculty taughtBy;
+    private String courseDesc;
+
+    public String getCourseDesc() {
+        return courseDesc;
+    }
+
+    public void setCourseDesc(String courseDesc) {
+        this.courseDesc = courseDesc;
+    }
 
     public String getCourseName() {
         return courseName;
@@ -99,4 +108,14 @@ public class CoursesDetails {
     public void setFaculty(Faculty taughtBy) {
         this.taughtBy = taughtBy;
     }
+
+
+    public Faculty getTaughtBy() {
+        return taughtBy;
+    }
+
+    public void setTaughtBy(Faculty taughtBy) {
+        this.taughtBy = taughtBy;
+    }
+
 }

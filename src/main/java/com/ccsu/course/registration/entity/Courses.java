@@ -19,13 +19,15 @@ public class Courses {
     private String time;
     private String day;
     private String faculty;
+    private String courseDesc;
+    private String crn;
 
     public Courses(){
 
     }
 
     public Courses(String courseNumber, String courseName, String semester, String type,
-                   String preRequisites, String partOfDay, String time, String day, String faculty) {
+                   String preRequisites, String partOfDay, String time, String day, String faculty, String courseDesc) {
         this.courseNumber = courseNumber;
         this.courseName = courseName;
         this.semester = semester;
@@ -35,6 +37,7 @@ public class Courses {
         this.time = time;
         this.day = day;
         this.faculty = faculty;
+        this.courseDesc = courseDesc;
     }
 
  
@@ -95,6 +98,25 @@ public class Courses {
     @Column(name = "faculty")
     public String getFaculty() { return faculty; }
     public void setFaculty(String faculty) { this.faculty = faculty; }
+
+    @Column(name = "coursedesc")
+    public String getCourseDesc() {
+        return courseDesc;
+    }
+
+    public void setCourseDesc(String courseDesc) {
+        this.courseDesc = courseDesc;
+    }
+
+    @Column(name = "crn")
+    public String getCrn() {
+        return crn;
+    }
+
+    public void setCrn(String crn) {
+        this.crn = crn;
+    }
+
 
     @Override
     public String toString() {
