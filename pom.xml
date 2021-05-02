@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.registration</groupId>
-	<artifactId>springboot</artifactId>
+	<artifactId>crop-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springboot</name>
 	<description>REST API for Registration</description>
