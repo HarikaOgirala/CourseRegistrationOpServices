@@ -20,8 +20,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 
-
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v3")
 
